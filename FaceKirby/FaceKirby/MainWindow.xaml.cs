@@ -54,6 +54,8 @@ namespace FaceKirby
         Dictionary<string, ReactiveProperty<bool>> KeysStates;
         Dictionary<string, ReactiveProperty<bool>> KirbyButtonsStates;
 
+        AppModel appModel = new AppModel();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -72,6 +74,7 @@ namespace FaceKirby
                 var pressed = KeysStates[button.Text];
 
                 pressed
+                    .ObserveOnDispatcher()
                     .Do(b => button.Background = b ? PressedBrush : NormalBrush)
                     .Subscribe(b =>
                     {
@@ -92,12 +95,15 @@ namespace FaceKirby
                 var pressed = KirbyButtonsStates[button.Text];
 
                 pressed
+                    .ObserveOnDispatcher()
                     .Do(b => button.Background = b ? PressedBrush : NormalBrush)
                     .Subscribe(b => key.Value = b);
 
                 button.TouchDown += (o, e) => pressed.Value = true;
                 button.TouchUp += (o, e) => pressed.Value = false;
             }
+
+            appModel.IsHandHit.Subscribe(b => KirbyButtonsStates["扉"].Value = b);
         }
     }
 }

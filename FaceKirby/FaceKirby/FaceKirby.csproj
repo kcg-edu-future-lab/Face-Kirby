@@ -90,6 +90,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AppModel.cs" />
     <Compile Include="AsyncKinectManager.cs" />
     <Compile Include="KinectHelper.cs" />
     <Compile Include="WindowHelper.cs" />

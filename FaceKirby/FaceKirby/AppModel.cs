@@ -27,6 +27,10 @@ namespace FaceKirby
         public ReadOnlyReactiveProperty<bool> AreHandsAbove { get; }
         public ReadOnlyReactiveProperty<bool> IsSquat { get; }
 
+        public ReadOnlyReactiveProperty<double> BodyOrientation { get; }
+        public ReadOnlyReactiveProperty<bool> IsLeftOriented { get; }
+        public ReadOnlyReactiveProperty<bool> IsRightOriented { get; }
+
         public AppModel()
         {
             KinectManager.SensorConnected
@@ -84,6 +88,10 @@ namespace FaceKirby
 
             AreHandsAbove = TargetBody.Select(GetAreHandsAbove).ToReadOnlyReactiveProperty();
             IsSquat = TargetBody.Select(GetIsSquat).ToReadOnlyReactiveProperty();
+
+            BodyOrientation = TargetBody.Select(GetBodyOrientation).ToReadOnlyReactiveProperty();
+            IsLeftOriented = BodyOrientation.Select(x => x < -0.4).ToReadOnlyReactiveProperty();
+            IsRightOriented = BodyOrientation.Select(x => x > 0.4).ToReadOnlyReactiveProperty();
         }
 
         static Skeleton GetTargetBody(Skeleton[] bodyData, Skeleton oldBody)
@@ -169,7 +177,20 @@ namespace FaceKirby
 
             var shoulder = body.Joints[JointType.ShoulderCenter];
 
-            return shoulder.Position.Y < 0;
+            return shoulder.TrackingState == JointTrackingState.Tracked && shoulder.Position.Y < 0;
+        }
+
+        static double GetBodyOrientation(Skeleton body)
+        {
+            if (body == null) return 0;
+
+            var left = body.Joints[JointType.ShoulderLeft];
+            var right = body.Joints[JointType.ShoulderRight];
+
+            if (!(left.TrackingState == JointTrackingState.Tracked && right.TrackingState == JointTrackingState.Tracked)) return 0;
+            var delta = right.Position.ToVector3D() - left.Position.ToVector3D();
+
+            return Math.Atan2(delta.Z, delta.X);
         }
     }
 

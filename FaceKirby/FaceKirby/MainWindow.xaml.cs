@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using KLibrary.Labs.UI;
 
 namespace FaceKirby
 {
@@ -23,6 +24,10 @@ namespace FaceKirby
         public MainWindow()
         {
             InitializeComponent();
+
+            this.SetBorderless();
+            this.SetInactive();
+            MouseLeftButtonDown += (o, e) => DragMove();
         }
     }
 }

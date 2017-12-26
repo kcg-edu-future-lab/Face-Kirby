@@ -25,6 +25,7 @@ namespace FaceKirby
         public ReadOnlyReactiveProperty<bool> IsHandHit { get; }
 
         public ReadOnlyReactiveProperty<bool> AreHandsAbove { get; }
+        public ReadOnlyReactiveProperty<bool> IsSquat { get; }
 
         public AppModel()
         {
@@ -82,6 +83,7 @@ namespace FaceKirby
                 .ToReadOnlyReactiveProperty();
 
             AreHandsAbove = TargetBody.Select(GetAreHandsAbove).ToReadOnlyReactiveProperty();
+            IsSquat = TargetBody.Select(GetIsSquat).ToReadOnlyReactiveProperty();
         }
 
         static Skeleton GetTargetBody(Skeleton[] bodyData, Skeleton oldBody)
@@ -159,6 +161,15 @@ namespace FaceKirby
             var shoulder = body.Joints[JointType.ShoulderCenter];
 
             return hands.All(j => j.TrackingState == JointTrackingState.Tracked && j.Position.Y > shoulder.Position.Y);
+        }
+
+        static bool GetIsSquat(Skeleton body)
+        {
+            if (body == null) return false;
+
+            var shoulder = body.Joints[JointType.ShoulderCenter];
+
+            return shoulder.Position.Y < 0;
         }
     }
 

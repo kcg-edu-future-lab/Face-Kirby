@@ -104,6 +104,7 @@ namespace FaceKirby
             }
 
             appModel.AreHandsAbove.Subscribe(b => KirbyButtonsStates["翔"].Value = b);
+            appModel.IsSquat.Subscribe(b => KirbyButtonsStates["屈"].Value = b);
             appModel.IsHandHit.Subscribe(b => KirbyButtonsStates["扉"].Value = b);
         }
     }

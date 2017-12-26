@@ -50,7 +50,7 @@ namespace FaceKirby
             this.SetInactive();
             MouseLeftButtonDown += (o, e) => DragMove();
 
-            var buttons = ButtonsPanel.Children.OfType<TextBlock>();
+            var buttons = GamepadButtonsPanel.Children.OfType<TextBlock>();
             foreach (var button in buttons)
             {
                 var key = KeyMap[button.Text];

@@ -61,7 +61,7 @@ namespace FaceKirby
                 {
                     Sensor = KinectManager.Sensor.Value,
                     ColorData = KinectManager.Sensor.Value.GetColorData(FramesInterval),
-                    DepthData = KinectManager.Sensor.Value.GetDepthData(FramesInterval),
+                    DepthData = KinectManager.Sensor.Value.GetDepthDataInInt16(FramesInterval),
                     BodyData = KinectManager.Sensor.Value.GetSkeletonData(FramesInterval),
                 })
                 .ToReadOnlyReactiveProperty(null, ReactivePropertyMode.DistinctUntilChanged);

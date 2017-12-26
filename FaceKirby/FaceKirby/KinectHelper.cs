@@ -100,6 +100,29 @@ namespace FaceKirby
                 return null;
             }
         }
+
+        public static short[] GetDepthDataInInt16(this KinectSensor sensor, TimeSpan timeout)
+        {
+            if (sensor == null || !sensor.IsRunning) return null;
+
+            try
+            {
+                using (var frame = sensor.DepthStream.OpenNextFrame((int)timeout.TotalMilliseconds))
+                {
+                    if (frame == null) return null;
+
+                    var data = new short[frame.PixelDataLength];
+                    frame.CopyPixelDataTo(data);
+                    return data;
+                }
+            }
+            catch (InvalidOperationException ex)
+            {
+                // センサーが稼働していない、またはストリームが有効になっていないときにフレームを取得すると発生します。
+                Debug.WriteLine(ex);
+                return null;
+            }
+        }
     }
 
     public abstract class BitmapInfo

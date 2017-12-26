@@ -28,7 +28,7 @@ namespace FaceKirby
         static readonly SolidColorBrush NormalBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#99FF9933"));
         static readonly SolidColorBrush PressedBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#99FF3300"));
 
-        static readonly Dictionary<string, Keys> KeyMap = new Dictionary<string, Keys>
+        static readonly Dictionary<string, Keys> KeysMap = new Dictionary<string, Keys>
         {
             { "⬆", Keys.I },
             { "⬇", Keys.M },
@@ -40,7 +40,19 @@ namespace FaceKirby
             { "A", Keys.X },
         };
 
-        List<ReactiveProperty<bool>> PressedList = new List<ReactiveProperty<bool>>();
+        static readonly Dictionary<string, string> KirbyButtonsMap = new Dictionary<string, string>
+        {
+            { "進", "➡" },
+            { "退", "⬅" },
+            { "翔", "⬆" },
+            { "跳", "A" },
+            { "屈", "⬇" },
+            { "吸", "B" },
+            { "扉", "⬆" },
+        };
+
+        Dictionary<string, ReactiveProperty<bool>> KeysStates;
+        Dictionary<string, ReactiveProperty<bool>> KirbyButtonsStates;
 
         public MainWindow()
         {
@@ -50,13 +62,14 @@ namespace FaceKirby
             this.SetInactive();
             MouseLeftButtonDown += (o, e) => DragMove();
 
-            var buttons = GamepadButtonsPanel.Children.OfType<TextBlock>();
-            foreach (var button in buttons)
-            {
-                var key = KeyMap[button.Text];
+            KeysStates = KeysMap.Keys.ToDictionary(x => x, x => new ReactiveProperty<bool>());
+            KirbyButtonsStates = KirbyButtonsMap.Keys.ToDictionary(x => x, x => new ReactiveProperty<bool>());
 
-                var pressed = new ReactiveProperty<bool>();
-                PressedList.Add(pressed);
+            var gamepadButtons = GamepadButtonsPanel.Children.OfType<TextBlock>();
+            foreach (var button in gamepadButtons)
+            {
+                var key = KeysMap[button.Text];
+                var pressed = KeysStates[button.Text];
 
                 pressed
                     .Do(b => button.Background = b ? PressedBrush : NormalBrush)

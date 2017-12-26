@@ -98,8 +98,8 @@ namespace FaceKirby
             IsJumping = TargetBody.Select(GetIsJumping).ToReadOnlyReactiveProperty();
 
             BodyOrientation = TargetBody.Select(GetBodyOrientation).ToReadOnlyReactiveProperty();
-            IsLeftOriented = BodyOrientation.Select(x => x < -0.4).ToReadOnlyReactiveProperty();
-            IsRightOriented = BodyOrientation.Select(x => x > 0.4).ToReadOnlyReactiveProperty();
+            IsLeftOriented = BodyOrientation.Select(x => x < -0.35).ToReadOnlyReactiveProperty();
+            IsRightOriented = BodyOrientation.Select(x => x > 0.35).ToReadOnlyReactiveProperty();
 
             JawLower = TargetBody
                 .Select(body =>
@@ -119,7 +119,7 @@ namespace FaceKirby
                     return animationUnits[AnimationUnit.JawLower];
                 })
                 .ToReadOnlyReactiveProperty();
-            IsMouthOpen = JawLower.Select(x => x > 0.4).ToReadOnlyReactiveProperty();
+            IsMouthOpen = JawLower.Select(x => x > 0.35).ToReadOnlyReactiveProperty();
         }
 
         static Skeleton GetTargetBody(Skeleton[] bodyData, Skeleton oldBody)

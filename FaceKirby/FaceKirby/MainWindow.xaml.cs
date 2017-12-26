@@ -84,6 +84,20 @@ namespace FaceKirby
                 button.TouchDown += (o, e) => pressed.Value = true;
                 button.TouchUp += (o, e) => pressed.Value = false;
             }
+
+            var kirbyButtons = KirbyButtonsPanel.Children.OfType<TextBlock>();
+            foreach (var button in kirbyButtons)
+            {
+                var key = KeysStates[KirbyButtonsMap[button.Text]];
+                var pressed = KirbyButtonsStates[button.Text];
+
+                pressed
+                    .Do(b => button.Background = b ? PressedBrush : NormalBrush)
+                    .Subscribe(b => key.Value = b);
+
+                button.TouchDown += (o, e) => pressed.Value = true;
+                button.TouchUp += (o, e) => pressed.Value = false;
+            }
         }
     }
 }

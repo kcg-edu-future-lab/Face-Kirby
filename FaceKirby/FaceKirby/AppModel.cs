@@ -187,7 +187,7 @@ namespace FaceKirby
             var left = body.Joints[JointType.ShoulderLeft];
             var right = body.Joints[JointType.ShoulderRight];
 
-            if (!(left.TrackingState == JointTrackingState.Tracked && right.TrackingState == JointTrackingState.Tracked)) return 0;
+            if (!(left.TrackingState != JointTrackingState.NotTracked && right.TrackingState != JointTrackingState.NotTracked)) return 0;
             var delta = right.Position.ToVector3D() - left.Position.ToVector3D();
 
             return Math.Atan2(delta.Z, delta.X);

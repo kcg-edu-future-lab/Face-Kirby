@@ -26,6 +26,7 @@ namespace FaceKirby
 
         public ReadOnlyReactiveProperty<bool> AreHandsAbove { get; }
         public ReadOnlyReactiveProperty<bool> IsSquat { get; }
+        public ReadOnlyReactiveProperty<bool> IsJumping { get; }
 
         public ReadOnlyReactiveProperty<double> BodyOrientation { get; }
         public ReadOnlyReactiveProperty<bool> IsLeftOriented { get; }
@@ -88,6 +89,7 @@ namespace FaceKirby
 
             AreHandsAbove = TargetBody.Select(GetAreHandsAbove).ToReadOnlyReactiveProperty();
             IsSquat = TargetBody.Select(GetIsSquat).ToReadOnlyReactiveProperty();
+            IsJumping = TargetBody.Select(GetIsJumping).ToReadOnlyReactiveProperty();
 
             BodyOrientation = TargetBody.Select(GetBodyOrientation).ToReadOnlyReactiveProperty();
             IsLeftOriented = BodyOrientation.Select(x => x < -0.4).ToReadOnlyReactiveProperty();
@@ -178,6 +180,15 @@ namespace FaceKirby
             var shoulder = body.Joints[JointType.ShoulderCenter];
 
             return shoulder.TrackingState == JointTrackingState.Tracked && shoulder.Position.Y < 0;
+        }
+
+        static bool GetIsJumping(Skeleton body)
+        {
+            if (body == null) return false;
+
+            var feet = new[] { body.Joints[JointType.FootLeft], body.Joints[JointType.FootRight] };
+
+            return feet.All(j => j.TrackingState != JointTrackingState.NotTracked && j.Position.Y > -0.8);
         }
 
         static double GetBodyOrientation(Skeleton body)

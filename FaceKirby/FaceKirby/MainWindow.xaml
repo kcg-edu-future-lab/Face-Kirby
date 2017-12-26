@@ -5,10 +5,53 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FaceKirby"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+        x:Name="window"
         x:Class="FaceKirby.MainWindow"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="Face Kirby" Height="400" Width="760" Topmost="True" Background="#3399CCFF">
+    <Window.Resources>
+        <Style x:Key="ButtonTextBlockStyle" TargetType="{x:Type TextBlock}">
+            <Setter Property="Width" Value="80"/>
+            <Setter Property="Height" Value="80"/>
+            <Setter Property="Background" Value="#99FF9933"/>
+            <Setter Property="Padding" Value="0,16,0,0"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="36"/>
+        </Style>
+        <Style x:Key="ButtonTextBlockStyle2" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource ButtonTextBlockStyle}">
+            <Setter Property="Padding" Value="0,26,0,0"/>
+            <Setter Property="FontSize" Value="20"/>
+        </Style>
+        <Style x:Key="CloseButtonTextBlockStyle" TargetType="{x:Type TextBlock}">
+            <Setter Property="Width" Value="60"/>
+            <Setter Property="Height" Value="60"/>
+            <Setter Property="Background" Value="#99FF6666"/>
+            <Setter Property="Padding" Value="0,6,0,0"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="36"/>
+        </Style>
+    </Window.Resources>
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="×" Style="{DynamicResource CloseButtonTextBlockStyle}" HorizontalAlignment="Right">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseLeftButtonDown">
+                    <ei:CallMethodAction TargetObject="{Binding ElementName=window}" MethodName="Close"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </TextBlock>
+        <Canvas x:Name="ButtonsPanel" Grid.Row="1">
+            <TextBlock Text="⬆" Style="{DynamicResource ButtonTextBlockStyle}" Canvas.Left="130" Canvas.Top="30"/>
+            <TextBlock Text="⬇" Style="{DynamicResource ButtonTextBlockStyle}" Canvas.Left="130" Canvas.Top="190"/>
+            <TextBlock Text="⬅" Style="{DynamicResource ButtonTextBlockStyle}" Canvas.Left="50" Canvas.Top="110"/>
+            <TextBlock Text="➡" Style="{DynamicResource ButtonTextBlockStyle}" Canvas.Left="210" Canvas.Top="110"/>
+            <TextBlock Text="SELECT" Style="{DynamicResource ButtonTextBlockStyle2}" Canvas.Left="310" Canvas.Top="190"/>
+            <TextBlock Text="START" Style="{DynamicResource ButtonTextBlockStyle2}" Canvas.Left="410" Canvas.Top="190"/>
+            <TextBlock Text="B" Style="{DynamicResource ButtonTextBlockStyle}" Canvas.Left="520" Canvas.Top="110"/>
+            <TextBlock Text="A" Style="{DynamicResource ButtonTextBlockStyle}" Canvas.Left="630" Canvas.Top="110"/>
+        </Canvas>
     </Grid>
 </Window>

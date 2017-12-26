@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>KLibrary.Labs.UI</name>
+    </assembly>
+    <members>
+        <member name="T:KLibrary.Labs.UI.ControlsHelper">
+            <summary>
+            Provides the helper methods for controls.
+            </summary>
+        </member>
+        <member name="M:KLibrary.Labs.UI.ControlsHelper.SetBorderless(System.Windows.Window)">
+            <summary>
+            Makes the window borderless and enables transparency.
+            Can not be called after the window has been shown.
+            </summary>
+            <param name="window">The window.</param>
+        </member>
+        <member name="M:KLibrary.Labs.UI.ControlsHelper.Relocate(System.Windows.Window,System.Windows.Int32Rect)">
+            <summary>
+            Relocates and resizes the window.
+            </summary>
+            <param name="window">The window.</param>
+            <param name="bounds">The location and the size.</param>
+        </member>
+        <member name="T:KLibrary.Labs.UI.ScreenHelper">
+            <summary>
+            Provides the helper methods for screen.
+            </summary>
+        </member>
+        <member name="P:KLibrary.Labs.UI.ScreenHelper.AllScreensBounds">
+            <summary>
+            Gets the bounds of all screens.
+            </summary>
+            <value>The bounds of all screens.</value>
+        </member>
+        <member name="P:KLibrary.Labs.UI.ScreenHelper.PrimaryScreenBounds">
+            <summary>
+            Gets the bounds of the primary screen.
+            </summary>
+            <value>The bounds of the primary screen.</value>
+        </member>
+    </members>
+</doc>

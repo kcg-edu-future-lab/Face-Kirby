@@ -103,6 +103,7 @@ namespace FaceKirby
                 button.TouchUp += (o, e) => pressed.Value = false;
             }
 
+            appModel.AreHandsAbove.Subscribe(b => KirbyButtonsStates["翔"].Value = b);
             appModel.IsHandHit.Subscribe(b => KirbyButtonsStates["扉"].Value = b);
         }
     }

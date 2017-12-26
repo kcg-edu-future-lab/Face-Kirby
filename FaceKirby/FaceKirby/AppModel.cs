@@ -24,6 +24,8 @@ namespace FaceKirby
         public ReadOnlyReactiveProperty<JointInfo?> HitHand { get; }
         public ReadOnlyReactiveProperty<bool> IsHandHit { get; }
 
+        public ReadOnlyReactiveProperty<bool> AreHandsAbove { get; }
+
         public AppModel()
         {
             KinectManager.SensorConnected
@@ -78,6 +80,8 @@ namespace FaceKirby
             IsHandHit = HitHand
                 .Select(_ => _.HasValue)
                 .ToReadOnlyReactiveProperty();
+
+            AreHandsAbove = TargetBody.Select(GetAreHandsAbove).ToReadOnlyReactiveProperty();
         }
 
         static Skeleton GetTargetBody(Skeleton[] bodyData, Skeleton oldBody)
@@ -144,7 +148,17 @@ namespace FaceKirby
         static bool GetIsHandHit(Skeleton body, Joint hand, bool isHitPreviously)
         {
             var handForward = hand.Position.Z - body.Position.Z;
-            return handForward < -0.3;
+            return handForward < -0.35;
+        }
+
+        static bool GetAreHandsAbove(Skeleton body)
+        {
+            if (body == null) return false;
+
+            var hands = new[] { body.Joints[JointType.HandLeft], body.Joints[JointType.HandRight] };
+            var shoulder = body.Joints[JointType.ShoulderCenter];
+
+            return hands.All(j => j.TrackingState == JointTrackingState.Tracked && j.Position.Y > shoulder.Position.Y);
         }
     }
 

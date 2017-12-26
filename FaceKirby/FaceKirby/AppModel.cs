@@ -6,6 +6,7 @@ using System.Reactive.Linq;
 using System.Windows.Media.Media3D;
 using FaceKirby.Properties;
 using Microsoft.Kinect;
+using Microsoft.Kinect.Toolkit.FaceTracking;
 using Reactive.Bindings;
 
 namespace FaceKirby
@@ -31,6 +32,11 @@ namespace FaceKirby
         public ReadOnlyReactiveProperty<double> BodyOrientation { get; }
         public ReadOnlyReactiveProperty<bool> IsLeftOriented { get; }
         public ReadOnlyReactiveProperty<bool> IsRightOriented { get; }
+
+        public ReadOnlyReactiveProperty<float> JawLower { get; }
+        public ReadOnlyReactiveProperty<bool> IsMouthOpen { get; }
+
+        FaceTracker faceTracker;
 
         public AppModel()
         {
@@ -94,6 +100,26 @@ namespace FaceKirby
             BodyOrientation = TargetBody.Select(GetBodyOrientation).ToReadOnlyReactiveProperty();
             IsLeftOriented = BodyOrientation.Select(x => x < -0.4).ToReadOnlyReactiveProperty();
             IsRightOriented = BodyOrientation.Select(x => x > 0.4).ToReadOnlyReactiveProperty();
+
+            JawLower = TargetBody
+                .Select(body =>
+                {
+                    if (body == null) return 0;
+
+                    var data = frameData.Value;
+                    if (data.ColorData == null || data.DepthData == null || data.BodyData == null) return 0;
+
+                    if (faceTracker == null)
+                        faceTracker = new FaceTracker(data.Sensor);
+
+                    var faceFrame = faceTracker.Track(data.Sensor.ColorStream.Format, data.ColorData, data.Sensor.DepthStream.Format, data.DepthData, body);
+                    if (!faceFrame.TrackSuccessful) return 0;
+
+                    var animationUnits = faceFrame.GetAnimationUnitCoefficients();
+                    return animationUnits[AnimationUnit.JawLower];
+                })
+                .ToReadOnlyReactiveProperty();
+            IsMouthOpen = JawLower.Select(x => x > 0.4).ToReadOnlyReactiveProperty();
         }
 
         static Skeleton GetTargetBody(Skeleton[] bodyData, Skeleton oldBody)

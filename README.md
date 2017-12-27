@@ -1,6 +1,11 @@
 ## Face Kirby
 ファミコン版「星のカービィ」シリーズを Microsoft Kinect でプレイします。
 
+全身および顔のジェスチャをキーボード入力に変換して、ファミコンのエミュレーターに送信する仕組みです。
+
+### Usage
+このツールおよびファミコンのエミュレーターを起動して使用します。
+
 ### System Requirements
 - .NET Framework 4.5
 - Microsoft Kinect v1 (Device)
